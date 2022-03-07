@@ -3,12 +3,13 @@
   <div class = "container">
     <div class = "row">
       <div class="card">
-
+        <div class = "card-header">No.1</div>
         <img
           class="card-img-left"
           :src="img"
           :alt="attrib"
         />
+
         <div class="card-body">
           <h4 class="card-title">John Doe</h4>
           <h5 class="card-subtitle"> Overview </h5>
@@ -16,7 +17,7 @@
           <p class="card-text">Some example text some example text. John Doe is an architect and engineerSome example text some example text. John Doe is an architect and engineerSome example text some example text.
             John Doe is an architect and engineerSome example text some example text. John Doe is an architect and engineerSome example text some example text. John Doe is an architect and engineerSome example text some example text.
             John Doe is an architect and engineerSome example text some example text. John Doe is an architect and engineerSome example text some example text. John Doe is an architect and engineer</p>
-
+          <!-- Bootstrap collapse -->
         </div>
         <div class="card-footer">
           <p> Steam link</p>
