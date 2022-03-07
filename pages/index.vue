@@ -3,8 +3,8 @@
     <div class="pexelry-wrapper">
       <div class="pexelry-head">
         <div>
-          <h1>Pexelry</h1>
-          <p>pic it</p>
+          <h1>GameSearch</h1>
+          <p>Search it, Review it</p>
         </div>
       </div>
       <div class="search-wrapper">
@@ -14,7 +14,7 @@
               <input
                 type="text"
                 class="form-control"
-                placeholder="Search photos here ..."
+                placeholder="Search games here ..."
                 v-model="search"
               />
             </label>
@@ -123,7 +123,7 @@ export default {
 .pexelry-wrapper {
   width: 100%;
   height: 500px;
-  background-image: url("../assets/pexels-marley-clovelly-3673525.webp");
+  background-image: url("../assets/ezgif.com-gif-maker.webp");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -137,9 +137,11 @@ export default {
 }
 h1 {
   font-size: 6rem;
+  color: white;
 }
 p {
   font-size: 2.5rem;
+  color: white;
 }
 h1,
 p {

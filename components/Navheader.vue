@@ -31,12 +31,12 @@
 export default {
   head() {
     return {
-      title: "Pexelry ",
+      title: "GameSearch ",
       meta: [
         {
           hid: "description",
           name: "description",
-          content: "search all the beautifull photos",
+          content: "search all the amazing games",
         },
       ],
     };

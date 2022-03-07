@@ -2,7 +2,7 @@
   <div>
     <div class="about-section">
       <div>
-        <h2>About Pexelry</h2>
+        <h2>About GameSearch</h2>
         <p>more about us</p>
       </div>
       <div>
@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="pexelry-about">
-      <h3>Pexelry</h3>
+      <h3>GameSearch</h3>
       <p>
         Application that leverages the pexels api to enable you find beautifull
         photos and pictures.
@@ -57,7 +57,7 @@ export default {};
 </script>
 <style scoped>
 .about-section {
-  background-image: url("../assets/pexels-marley-clovelly-3673525.webp");
+  background-image: url("../assets/ezgif.com-gif-maker.webp");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -71,9 +71,11 @@ export default {};
 h2 {
   font-weight: bold;
   font-size: 4.5rem;
+  color: white;
 }
 p {
   font-size: 2.5rem;
+  color: white;
 }
 .pexelry-about {
   max-width: 48rem;
@@ -85,6 +87,7 @@ p {
 }
 .pexelry-about p {
   font-size: 20px;
+  color: black;
 }
 span {
   font-weight: bold;
