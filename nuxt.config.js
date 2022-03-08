@@ -117,6 +117,9 @@ export default {
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
+    babel: {
+      compact: true,
+    },
     configureWebpack: {
       optimization: {
         runtimeChunk: 'single',
