@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <a class="navbar-brand" href="#">
       <!-- <img src="../assets/John-Philip.jpg" width="30" height="30" class="d-inline-block align-top img-rounded" alt=""> -->
-      Pexelry
+      GameSearch
     </a>
     <button
       class="navbar-toggler"
