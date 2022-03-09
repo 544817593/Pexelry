@@ -1,5 +1,13 @@
 <template>
   <div>
+        <div class="histories">
+          <img src="../assets/settings.png" alt="Settings" @click="settings()" width="24" height="24">
+          Settings<p></p>
+          <img src="../assets/history.png" alt="Show" @click="showHistory()">
+          Show history<p></p>
+          <img src="../assets/trash.png" alt="Empty" @click="empty()" width="24" height="24">
+          Empty history 
+      </div>
     <div class="pexelry-wrapper">
       <div class="pexelry-head">
         <div>
@@ -8,7 +16,7 @@
         </div>
       </div>
       <div class="search-wrapper">
-        <form @submit.prevent="getSearch">
+        <form @submit.prevent="getSearch" id="searchForm">
           <div class="input-group">
             <label>
               <input
@@ -20,7 +28,7 @@
             </label>
 
             <span
-              ><button type="submit" class="input-group-addon bg-success">
+              ><button type="submit" class="input-group-addon bg-success" id="searchButton">
                 Search
               </button></span
             >
@@ -69,7 +77,23 @@
   </div>     
 </template>
 
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/62290a9da34c2456412a4944/1fto52ubr';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+
 <script>
+import Swal from 'sweetalert2'
+import 'animate.css';
 import config from "@/config/keys.js";
 const Reviews = () =>
   import(/* webpackChunkName: "Photoscomponent" */ "@/components/reviews");
@@ -101,9 +125,18 @@ export default {
           { id: 9, first_name: 'Barney', last_name: 'Rubble' },
           { id: 10, first_name: 'Fred', last_name: 'Flintstone' },
           { id: 11, first_name: 'Wilma', last_name: 'Flintstone' },
-          { id: 12, first_name: 'Barney', last_name: 'Rubble' }]
-    }
+          { id: 12, first_name: 'Barney', last_name: 'Rubble' }],
+      historyList:[], // Search history
+        resultsPerPage: 5 // Results per page displayed
+    };
+
   },
+  mounted() {
+        //如果本地存储的数据historyList有值，直接赋值给data中的historyList
+        if (JSON.parse(localStorage.getItem("historyList"))) {
+            this.historyList = JSON.parse(localStorage.getItem("historyList"));
+        }
+    },
   computed: {
     photoos() {
       return this.$store.state.photos;
@@ -118,7 +151,7 @@ export default {
     const headers = { Authorization: this.api_key };
     try {
       const response = await fetch(
-        `https://api.pexels.com/v1/search?query=${this.search}&per_page=10`,
+        `https://api.pexels.com/v1/search?query=${this.search}&per_page=${this.resultsPerPage}`,
         { headers }
       );
       const data = await response.json();
@@ -132,13 +165,27 @@ export default {
     }
   },
   methods: {
+    
     // runs only on field search
     async getSearch() {
+            if (this.search != ''){
+        // 没有搜索记录，把搜索值push进数组首位，存入本地
+                if (!this.historyList.includes(this.search)) {
+                  this.historyList.unshift(this.search);
+                  localStorage.setItem("historyList", JSON.stringify(this.historyList));
+                }else{
+                    //有搜索记录，删除之前的旧记录，将新搜索值重新push到数组首位
+                    let i =this.historyList.indexOf(this.search);
+                    this.historyList.splice(i,1)
+                    this.historyList.unshift(this.search);
+                    localStorage.setItem("historyList", JSON.stringify(this.historyList));
+                }
+      }
       const headers = { Authorization: this.api_key };
       // fetch photos from the api
       try {
         const response = await fetch(
-          `https://api.pexels.com/v1/search?query=${this.search}&per_page=10`,
+          `https://api.pexels.com/v1/search?query=${this.search}&per_page=${this.resultsPerPage}`,
           { headers }
         );
         const data = await response.json();
@@ -149,6 +196,60 @@ export default {
         console.log(error);
       }
     },
+            //清空历史搜索记录
+        empty(){
+            localStorage.removeItem('historyList');
+            this.historyList = [];
+            Swal.fire({
+  icon: 'success',
+  title: 'Search history cleared',
+})
+        },
+
+        // 弹窗历史记录
+        showHistory(){
+          Swal.fire({
+  title: 'Search history',
+  text: this.historyList,
+  showClass: {
+    popup: 'animate__animated animate__fadeInDown'
+  },
+  hideClass: {
+    popup: 'animate__animated animate__fadeOutUp'
+  }
+})         
+        }, 
+        // Change number of results per page
+        async settings(){
+/* inputOptions can be an object or Promise */
+const inputOptions = await new Promise((resolve) => {
+  setTimeout(() => {
+    resolve({
+      '10': '10',
+      '25': '25',
+      '50': '50'
+    })
+  }, 100)
+})
+
+const {} = Swal.fire({
+  title: 'Results per page',
+  input: 'radio',
+  inputOptions: inputOptions,
+  inputValidator: (value) => {
+    if (!value) {
+      return 'You need to choose something!'
+    }
+  }
+}).then((result) => {
+  if (result.value){
+    this.resultsPerPage = result.value;
+    localStorage.removeItem("resultsPerPage");
+    localStorage.setItem("resultsPerPage", JSON.stringify(result.value));
+  }
+})
+
+        }
   },
 
 };
@@ -213,10 +314,10 @@ button:focus {
   flex-wrap: wrap;
   padding: 3rem 0;
 }
-.error {
-  padding: 4rem 0;
-}
-.error p {
-  font-size: 24px;
+.histories{
+  position: absolute;
+  z-index: 1000;
+  margin-left: 1250px;
+  margin-top: 14px;
 }
 </style>

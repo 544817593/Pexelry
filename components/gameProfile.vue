@@ -155,7 +155,7 @@ p {
    overflow: hidden;
  }
 
-img{
+.card-img-left-gameProfile{
   width:29rem;
   height:13rem;}
 

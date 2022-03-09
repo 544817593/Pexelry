@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <a class="navbar-brand" href="#">
       <!-- <img src="../assets/John-Philip.jpg" width="30" height="30" class="d-inline-block align-top img-rounded" alt=""> -->
-      Pexelry
+      Game Search
     </a>
     <button
       class="navbar-toggler"
@@ -31,6 +31,7 @@
   </nav>
 </template>
 <script>
+
 export default {
   head() {
     return {
@@ -44,6 +45,7 @@ export default {
       ],
     };
   },
+
 };
 </script>
 
@@ -57,4 +59,9 @@ a:hover {
 .img-rounded {
   border-radius: 50%;
 }
+
+.navbar {
+  z-index: 900;
+}
+
 </style>
