@@ -23,6 +23,9 @@
         <li class="nav-item active">
           <nuxt-link to="/about" class="nav-link"> About</nuxt-link>
         </li>
+        <li class="nav-item active">
+          <nuxt-link to="/game" class="nav-link"> Game page example</nuxt-link>
+        </li>
       </ul>
     </div>
   </nav>

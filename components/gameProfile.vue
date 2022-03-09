@@ -1,11 +1,9 @@
 <template>
-
   <div class = "container">
     <div class = "row">
       <div class="card">
-        <div class = "card-header">No.{{id}}</div>
         <img
-          class="card-img-left"
+          class="card-img-left card-img-left-gameProfile"
           :src="img"
           :alt="attrib"
         />
@@ -13,9 +11,12 @@
         <div class="card-body">
           <h4 class="card-title">Game title</h4>
           <h5 class="card-subtitle"> Description </h5>
-
           <p class="card-text">description description description description description description description description</p>
-          <span class="card-button"><button type="submit" class="button-show-more" @click="goToGamePage()">Show more</button></span>
+          <h6 class="card-otherinfo">Other information</h6>
+          <p class="card-otherinfotext">Recent rating: Very Negative
+              <br>Recent posivies: 1% of the 29,180 user reviews in the last 30 days are positive.
+              <br>Date published: 21 Dec, 2017
+              <br>Publisher: 24 Entertainment</p>
           <!-- Bootstrap collapse -->
         </div>
         <div class="card-footer">
@@ -32,45 +33,9 @@
       </div>
     </div>
   </div>
-
-
-
-  
-
-
-  <!--
-  <div class="card" style="width: 50rem">
-
-    <img
-      class="card-img-left"
-      :src="img"
-      :alt="attrib"
-      style="height: 20rem; width: 25rem"
-      height="320"
-    />
-    <div class="card-body-left">
-      <span>
-        <img
-          class="img-rounded img-responsive"
-          width="40"
-          height="40"
-          :src="imgcap"
-          :alt="attrib"
-        /></span>
-
-      <p class="card-text">{{ name }}</p>
-      <p class="download" @click="getDownload()">
-        <font-awesome-icon :icon="['fas', 'download']" />
-      </p>
-    </div>
-  </div>-->
 </template>
 
-
 <script>
-
-
-import lozad from "lozad";
 const axios = require("axios");
 export default {
   name: "Photos",
@@ -112,28 +77,19 @@ export default {
 
     },
 
-    // add user review to db
+    // add review to db
     addReview() {
 
-    },
-
-
-    // open page for one game
-    goToGamePage(){
-      this.$router.push({name:'game', params:{id:this.gameid}});
     }
   }
 };
-
-
 </script>
-
-
-<style scoped>
+  
+<style>
 .card {
   margin: 20px 20px;
   box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
-  height: 13rem;
+  height: 20rem;
   flex-direction: row;
   width: 100%;
 }
@@ -145,6 +101,11 @@ export default {
   padding: 0;
   margin: 0;
 }
+
+.card-img-left-gameProfile{
+  margin-top: 50px;
+}
+
 p {
   display: inline-block;
   padding-left: 25px;
