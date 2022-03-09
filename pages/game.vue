@@ -29,6 +29,7 @@
       </div>
     </div>
     <div>
+        TEST -- THIS IS GAME PAGE
       <!--vue-scroll-indicator -->
       <vue-scroll-indicator
         height="3px"
@@ -37,18 +38,19 @@
       ></vue-scroll-indicator>
     </div>
     <div>
-      <div v-if="photos.length === 0">
+      <div><Game /></div>
+      <div v-if="reviews.length == 0">
         <Loading />
       </div>
-      <div v-else class="photos-wrapper">
-        <Photos
-          v-for="photo in photos"
-          v-bind:key="photo.id"
-          :name="photo.photographer"
-          :attrib="photo.photographer_url"
-          :img="photo.src.medium"
-          :imgcap="photo.src.portrait"
-          :id="photo.id"
+      <div v-else class="reviews-wrapper">
+        <Reviews
+          v-for="review in reviews"
+          v-bind:key="review.id"
+          :name="review.photographer"
+          :attrib="review.photographer_url"
+          :img="review.src.medium"
+          :imgcap="review.src.portrait"
+          :id="review.id"
         />
       </div>
     </div>
@@ -69,19 +71,22 @@
 
 <script>
 import config from "@/config/keys.js";
-const Photos = () =>
-  import(/* webpackChunkName: "Photoscomponent" */ "@/components/photos");
+const Reviews = () =>
+  import(/* webpackChunkName: "Photoscomponent" */ "@/components/reviews");
+const Game = () =>
+  import(/* webpackChunkName: "Photoscomponent" */ "@/components/gameProfile");
 const Loading = () =>
   import(/* webpackChunkName: "Loadingcomponent" */ "@/components/Loading");
 export default {
   components: {
-    Photos,
+    Reviews,
     Loading,
+    Game
   },
   data() {
     return {
       api_key: config.keys.api_key,
-      photos: [],
+      reviews: [],
       search: "store",
       perPage: 10,
       currentPage: 1,
@@ -97,7 +102,7 @@ export default {
           { id: 10, first_name: 'Fred', last_name: 'Flintstone' },
           { id: 11, first_name: 'Wilma', last_name: 'Flintstone' },
           { id: 12, first_name: 'Barney', last_name: 'Rubble' }]
-    };
+    }
   },
   computed: {
     photoos() {
@@ -117,9 +122,9 @@ export default {
         { headers }
       );
       const data = await response.json();
-      const photos = data.photos;
+      const reviews = data.photos;
       //store the returned data into the photos array
-      this.photos = photos;
+      this.reviews = reviews;
       //prevent our input search data from showing up in the input box
       this.search = "";
     } catch (error) {
@@ -137,8 +142,8 @@ export default {
           { headers }
         );
         const data = await response.json();
-        const photos = data.photos;
-        this.photos = photos;
+        const reviews = data.photos;
+        this.reviews = reviews;
         this.search = "";
       } catch (error) {
         console.log(error);
@@ -201,7 +206,7 @@ button {
 button:focus {
   outline: none;
 }
-.photos-wrapper {
+.reviews-wrapper {
   width: 85%;
   margin: 0 auto;
   display: flex;
