@@ -16,8 +16,7 @@
     <div class="pexelry-about">
       <h3>GameSearch</h3>
       <p>
-        Application that leverages the pexels api to enable you find beautifull
-        photos and pictures.
+        Abcdefghijklmnopqrstuvwxyz!!!!!
       </p>
       <p>
         Empowering Creators By providing free stock photos Pexels helps millions
