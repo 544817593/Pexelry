@@ -1,13 +1,5 @@
 <template>
   <div>
-        <div class="histories">
-          <img src="../assets/settings.png" alt="Settings" @click="settings()" width="24" height="24">
-          Settings<p></p>
-          <img src="../assets/history.png" alt="Show" @click="showHistory()">
-          Show history<p></p>
-          <img src="../assets/trash.png" alt="Empty" @click="empty()" width="24" height="24">
-          Empty history 
-      </div>
     <div class="pexelry-wrapper">
       <div class="pexelry-head">
         <div>
@@ -74,7 +66,7 @@
 
       <p class="mt-3">Current Page: {{ currentPage }}</p>
     </div>
-  </div>     
+  </div>
 </template>
 
 <!--Start of Tawk.to Script-->
@@ -165,7 +157,7 @@ export default {
     }
   },
   methods: {
-    
+
     // runs only on field search
     async getSearch() {
             if (this.search != ''){
@@ -196,60 +188,6 @@ export default {
         console.log(error);
       }
     },
-            //清空历史搜索记录
-        empty(){
-            localStorage.removeItem('historyList');
-            this.historyList = [];
-            Swal.fire({
-  icon: 'success',
-  title: 'Search history cleared',
-})
-        },
-
-        // 弹窗历史记录
-        showHistory(){
-          Swal.fire({
-  title: 'Search history',
-  text: this.historyList,
-  showClass: {
-    popup: 'animate__animated animate__fadeInDown'
-  },
-  hideClass: {
-    popup: 'animate__animated animate__fadeOutUp'
-  }
-})         
-        }, 
-        // Change number of results per page
-        async settings(){
-/* inputOptions can be an object or Promise */
-const inputOptions = await new Promise((resolve) => {
-  setTimeout(() => {
-    resolve({
-      '10': '10',
-      '25': '25',
-      '50': '50'
-    })
-  }, 100)
-})
-
-const {} = Swal.fire({
-  title: 'Results per page',
-  input: 'radio',
-  inputOptions: inputOptions,
-  inputValidator: (value) => {
-    if (!value) {
-      return 'You need to choose something!'
-    }
-  }
-}).then((result) => {
-  if (result.value){
-    this.resultsPerPage = result.value;
-    localStorage.removeItem("resultsPerPage");
-    localStorage.setItem("resultsPerPage", JSON.stringify(result.value));
-  }
-})
-
-        }
   },
 
 };
