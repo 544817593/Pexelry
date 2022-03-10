@@ -21,12 +21,12 @@
         <div class="card-footer">
           <p> Steam link</p>
           <p class="download" @click="getDownload()">
-            <font-awesome-icon :icon="['fas', 'link']" />
+            <img src="../assets/link.png" alt="Steam" width="24" height="24">
           </p>
           <br>
           <p>Add review</p>
           <p class="add-review" @click="addReview()">
-            <font-awesome-icon :icon="['fas', 'pen']" />
+            <img src="../assets/review.png" alt="Review" width="24" height="24">
           </p>
         </div>
       </div>
@@ -138,13 +138,6 @@ export default {
   width: 100%;
 }
 
-.img-rounded {
-  border-radius: 50%;
-  width: 2.5rem;
-  height: 2.5rem;
-  padding: 0;
-  margin: 0;
-}
 p {
   display: inline-block;
   padding-left: 25px;
@@ -177,15 +170,6 @@ p {
   padding-left: 2.5rem;
 }
 
-.link {
-  cursor: pointer;
-  color: #333333;
-  font-size: 1.1rem;
-  padding-left: 2.5rem;
-}
-.card-content{
-  flec-basis: auto;
-}
  .card-text{
  display: -webkit-box;
    -webkit-box-orient: vertical;
@@ -194,7 +178,7 @@ p {
    overflow: hidden;
  }
 
-img{
+.card-img-left{
   width:29rem;
   height:13rem;}
 
