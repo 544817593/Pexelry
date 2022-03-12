@@ -1,8 +1,7 @@
 <template>
 
   <div>
-<<<<<<< Updated upstream
-=======
+
 
     <div class="histories">
           <img src="../assets/settings.png" alt="Settings" @click="settings()" width="24" height="24">
@@ -12,7 +11,7 @@
           <img src="../assets/trash.png" alt="Empty" @click="empty()" width="24" height="24">
           Empty history
       </div>
->>>>>>> Stashed changes
+
     <div class="pexelry-wrapper">
 
       <div class="pexelry-head">
@@ -154,20 +153,7 @@ export default {
             this.resultsPerPage = JSON.parse(localStorage.getItem("resultsPerPage"));
         }
     },
-<<<<<<< Updated upstream
-  computed: {
-    photoos() {
-      return this.$store.state.photos;
-      console.log(this.$store.state.photos);
-    },
-    rows() {
-        return this.items.length
-    },
 
-  },
-=======
-
->>>>>>> Stashed changes
   async created() {
     //Called synchronously after the instance is created
 
@@ -243,10 +229,6 @@ export default {
           console.log(error);
         }
     },
-<<<<<<< Updated upstream
-=======
-
-        //清空历史搜索记录
         empty(){
             localStorage.removeItem('historyList');
             this.historyList = [];
@@ -304,7 +286,7 @@ const {} = Swal.fire({
 
         }
 
->>>>>>> Stashed changes
+
   },
 }
 
