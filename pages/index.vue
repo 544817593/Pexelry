@@ -1,6 +1,18 @@
 <template>
 
   <div>
+<<<<<<< Updated upstream
+=======
+
+    <div class="histories">
+          <img src="../assets/settings.png" alt="Settings" @click="settings()" width="24" height="24">
+          Settings<p></p>
+          <img src="../assets/history.png" alt="Show" @click="showHistory()">
+          Show history<p></p>
+          <img src="../assets/trash.png" alt="Empty" @click="empty()" width="24" height="24">
+          Empty history
+      </div>
+>>>>>>> Stashed changes
     <div class="pexelry-wrapper">
 
       <div class="pexelry-head">
@@ -44,18 +56,18 @@
       ></vue-scroll-indicator>
     </div>
 
-      <div v-if="photos.length === 0">
-        <Loading />
-      </div>
-      <div v-else class="photos-wrapper">
+
+      <div class="photos-wrapper">
         <Photos
-          v-for="photo in photos"
+          v-for="(photo, index) in images"
           v-bind:key="photo.id"
-          :name="photo.photographer"
-          :attrib="photo.photographer_url"
-          :img="photo.src.medium"
-          :imgcap="photo.src.portrait"
-          :id="photo.id"
+          :name="names[index]"
+          :attrib="names[index]"
+          :img="photo"
+          :gameid="ids[index]"
+          :ovv = "ovv[index]"
+          :links = "links[index]"
+          :ranks = "ranks[index]"
         />
       </div>
     </div>
@@ -63,7 +75,6 @@
     <div class="overflow-auto">
       <b-pagination
         v-model="currentPage"
-        :total-rows="rows"
         :per-page="perPage"
         aria-controls="my-table"
         align="center"
@@ -107,10 +118,15 @@ export default {
   data() {
     return {
       api_key: config.keys.api_key,
-      photos: [],
-      search: "store",
+      images: [],
+      search: "game",
       perPage: 10,
       currentPage: 1,
+      ranks:[],
+      names:[],
+      ovv:[],
+      links:[],
+      ids:[],
       items:[{ id: 1, first_name: 'Fred', last_name: 'Flintstone' },
           { id: 2, first_name: 'Wilma', last_name: 'Flintstone' },
           { id: 3, first_name: 'Barney', last_name: 'Rubble' },
@@ -138,6 +154,7 @@ export default {
             this.resultsPerPage = JSON.parse(localStorage.getItem("resultsPerPage"));
         }
     },
+<<<<<<< Updated upstream
   computed: {
     photoos() {
       return this.$store.state.photos;
@@ -148,20 +165,33 @@ export default {
     },
 
   },
+=======
+
+>>>>>>> Stashed changes
   async created() {
     //Called synchronously after the instance is created
-    const headers = { Authorization: this.api_key };
+
     try {
       const response = await fetch(
-        `https://api.pexels.com/v1/search?query=${this.search}&per_page=${this.resultsPerPage}`,
-        { headers }
+        ` http://34.125.79.200:5432/search?query=${this.search}&per_page=${this.perPage}&page_num=${this.currentPage}`
       );
       const data = await response.json();
-      const photos = data.photos;
+      const images = data.img;
+      const ranks = data.search_rank;
+      const ovv = data.game_description;
+      const links = data.steam_link;
+      const names = data.game_name;
+      const ids = data.appids;
       //store the returned data into the photos array
-      this.photos = photos;
+      this.images = images;
+      this.ranks = ranks;
+      this.ovv = ovv;
+      this.links = links;
+      this.names = names;
+      this.ids = ids;
       //prevent our input search data from showing up in the input box
       this.search = "";
+
     } catch (error) {
       console.log(error);
     }
@@ -186,19 +216,95 @@ export default {
 
       const headers = { Authorization: this.api_key };
       // fetch photos from the api
-      try {
-        const response = await fetch(
-          `https://api.pexels.com/v1/search?query=${this.search}&per_page=${this.resultsPerPage}`,
-          { headers }
-        );
-        const data = await response.json();
-        const photos = data.photos;
-        this.photos = photos;
-        this.search = "";
-      } catch (error) {
-        console.log(error);
-      }
+
+
+        try {
+          const response = await fetch(
+            ` http://34.125.79.200:5432/search?query=${this.search}&per_page=${this.perPage}&page_num=${this.currentPage}`
+          );
+          const data = await response.json();
+          const images = data.img;
+          const ranks = data.search_rank;
+          const ovv = data.game_description;
+          const links = data.steam_link;
+          const names = data.game_name;
+          const ids = data.appids;
+          //store the returned data into the photos array
+          this.images = images;
+          this.ranks = ranks;
+          this.ovv = ovv;
+          this.links = links;
+          this.names = names;
+          this.ids = ids;
+          //prevent our input search data from showing up in the input box
+          this.search = "";
+
+        } catch (error) {
+          console.log(error);
+        }
     },
+<<<<<<< Updated upstream
+=======
+
+        //清空历史搜索记录
+        empty(){
+            localStorage.removeItem('historyList');
+            this.historyList = [];
+            Swal.fire({
+  icon: 'success',
+  title: 'Search history cleared',
+})
+        },
+
+        // 弹窗历史记录
+        showHistory(){
+          Swal.fire({
+  title: 'Search history',
+  text: this.historyList,
+  showClass: {
+    popup: 'animate__animated animate__fadeInDown'
+  },
+  hideClass: {
+    popup: 'animate__animated animate__fadeOutUp'
+  }
+})
+        },
+
+        // Change number of results per page
+        async settings(){
+/* inputOptions can be an object or Promise */
+const inputOptions = await new Promise((resolve) => {
+  setTimeout(() => {
+    resolve({
+      '10': '10',
+      '25': '25',
+      '50': '50'
+    })
+  }, 100)
+})
+
+const {} = Swal.fire({
+  title: 'Results per page',
+  input: 'radio',
+  inputOptions: inputOptions,
+  inputValidator: (value) => {
+    if (!value) {
+      return 'You need to choose something!'
+    }
+  }
+}).then((result) => {
+  if (result.value){
+    this.resultsPerPage = result.value;
+    localStorage.removeItem("resultsPerPage");
+    localStorage.setItem("resultsPerPage", JSON.stringify(result.value));
+    this.search = this.historyList[0];
+    document.getElementById("searchButton").click();
+  }
+})
+
+        }
+
+>>>>>>> Stashed changes
   },
 }
 

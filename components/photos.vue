@@ -3,7 +3,7 @@
   <div class = "container">
     <div class = "row">
       <div class="card">
-        <div class = "card-header">No.{{id}}</div>
+        <div class = "card-header">No.{{ranks}}</div>
         <img
           class="card-img-left"
           :src="img"
@@ -11,10 +11,10 @@
         />
 
         <div class="card-body">
-          <h4 class="card-title">Game title</h4>
+          <h4 class="card-title">{{name}}</h4>
           <h5 class="card-subtitle"> Description </h5>
 
-          <p class="card-text">description description description description description description description description</p>
+          <p class="card-text">{{ovv}}</p>
           <span class="card-button"><button type="submit" class="button-show-more" @click="goToGamePage()">Show more</button></span>
           <!-- Bootstrap collapse -->
         </div>
@@ -35,7 +35,7 @@
 
 
 
-  
+
 
 
   <!--
@@ -75,11 +75,13 @@ const axios = require("axios");
 export default {
   name: "Photos",
   props:{
+    ranks:{},
     img:{},
     name:{},
+    ovv:{},
+    links:{},
     attrib:{},
     imgcap:{},
-    id:{},
     gameid:{}
   },
   data() {
