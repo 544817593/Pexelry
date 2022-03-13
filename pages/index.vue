@@ -4,12 +4,22 @@
 
 
     <div class="histories">
-          <img src="../assets/settings.png" alt="Settings" @click="settings()" width="24" height="24">
-          Settings<p></p>
-          <img src="../assets/history.png" alt="Show" @click="showHistory()">
-          Show history<p></p>
-          <img src="../assets/trash.png" alt="Empty" @click="empty()" width="24" height="24">
+          <topButtons @click="settings()">
+          <img src="../assets/settings.png" alt="Settings"  width="24" height="24">
+          Settings
+          </topButtons>
+          <p></p>
+
+          <topButtons @click="showHistory()">
+          <img src="../assets/history.png" alt="Show">
+          Show history
+          </topButtons>
+          <p></p>
+
+          <topButtons @click="empty()">
+          <img src="../assets/trash.png" alt="Empty" width="24" height="24">
           Empty history
+          </topButtons>
       </div>
 
     <div class="pexelry-wrapper">
@@ -75,8 +85,15 @@
       <b-pagination
         v-model="currentPage"
         :per-page="perPage"
+        :total-rows="totalRes"
         aria-controls="my-table"
         align="center"
+        @input="changePage()"
+        first-text="First"
+      prev-text="Prev"
+      next-text="Next"
+      last-text="Last"
+      size="lg"
       ></b-pagination>
 
       <p class="mt-3">Current Page: {{ currentPage }}</p>
@@ -126,20 +143,21 @@ export default {
       ovv:[],
       links:[],
       ids:[],
-      items:[{ id: 1, first_name: 'Fred', last_name: 'Flintstone' },
-          { id: 2, first_name: 'Wilma', last_name: 'Flintstone' },
-          { id: 3, first_name: 'Barney', last_name: 'Rubble' },
-          { id: 4, first_name: 'Fred', last_name: 'Flintstone' },
-          { id: 5, first_name: 'Wilma', last_name: 'Flintstone' },
-          { id: 6, first_name: 'Barney', last_name: 'Rubble' },
-          { id: 7, first_name: 'Fred', last_name: 'Flintstone' },
-          { id: 8, first_name: 'Wilma', last_name: 'Flintstone' },
-          { id: 9, first_name: 'Barney', last_name: 'Rubble' },
-          { id: 10, first_name: 'Fred', last_name: 'Flintstone' },
-          { id: 11, first_name: 'Wilma', last_name: 'Flintstone' },
-          { id: 12, first_name: 'Barney', last_name: 'Rubble' }],
+      // items:[{ id: 1, first_name: 'Fred', last_name: 'Flintstone' },
+      //     { id: 2, first_name: 'Wilma', last_name: 'Flintstone' },
+      //     { id: 3, first_name: 'Barney', last_name: 'Rubble' },
+      //     { id: 4, first_name: 'Fred', last_name: 'Flintstone' },
+      //     { id: 5, first_name: 'Wilma', last_name: 'Flintstone' },
+      //     { id: 6, first_name: 'Barney', last_name: 'Rubble' },
+      //     { id: 7, first_name: 'Fred', last_name: 'Flintstone' },
+      //     { id: 8, first_name: 'Wilma', last_name: 'Flintstone' },
+      //     { id: 9, first_name: 'Barney', last_name: 'Rubble' },
+      //     { id: 10, first_name: 'Fred', last_name: 'Flintstone' },
+      //     { id: 11, first_name: 'Wilma', last_name: 'Flintstone' },
+      //     { id: 12, first_name: 'Barney', last_name: 'Rubble' }],
         historyList: [], // Search history
-        resultsPerPage: 5 // Results per page displayed
+        totalRes: 0,
+        lastSearch: "game" // Most recent search
     };
 
   },
@@ -168,6 +186,7 @@ export default {
       const links = data.steam_link;
       const names = data.game_name;
       const ids = data.appids;
+      const totalRes = data.total_num;
       //store the returned data into the photos array
       this.images = images;
       this.ranks = ranks;
@@ -177,6 +196,7 @@ export default {
       this.ids = ids;
       //prevent our input search data from showing up in the input box
       this.search = "";
+      this.totalRes = totalRes;
 
     } catch (error) {
       console.log(error);
@@ -199,12 +219,14 @@ export default {
                 }
       }
 
+      this.lastSearch = this.search;
+
 
       const headers = { Authorization: this.api_key };
       // fetch photos from the api
 
-
         try {
+          
           const response = await fetch(
             ` http://34.125.79.200:5432/search?query=${this.search}&per_page=${this.perPage}&page_num=${this.currentPage}`
           );
@@ -215,6 +237,7 @@ export default {
           const links = data.steam_link;
           const names = data.game_name;
           const ids = data.appids;
+          const totalRes = data.total_num;
           //store the returned data into the photos array
           this.images = images;
           this.ranks = ranks;
@@ -224,6 +247,7 @@ export default {
           this.ids = ids;
           //prevent our input search data from showing up in the input box
           this.search = "";
+          this.totalRes = totalRes;
 
         } catch (error) {
           console.log(error);
@@ -258,8 +282,9 @@ export default {
 const inputOptions = await new Promise((resolve) => {
   setTimeout(() => {
     resolve({
+      '5': '5',
       '10': '10',
-      '25': '25',
+      '20': '20',
       '50': '50'
     })
   }, 100)
@@ -276,15 +301,50 @@ const {} = Swal.fire({
   }
 }).then((result) => {
   if (result.value){
-    this.resultsPerPage = result.value;
-    localStorage.removeItem("resultsPerPage");
-    localStorage.setItem("resultsPerPage", JSON.stringify(result.value));
-    this.search = this.historyList[0];
-    document.getElementById("searchButton").click();
+    this.perPage = result.value;
+    localStorage.removeItem("perPage");
+    localStorage.setItem("perPage", JSON.stringify(result.value));
+    this.search = this.lastSearch;
+    this.getSearch();
   }
 })
 
+        },
+
+  async changePage(){
+    this.search = this.lastSearch;
+      const headers = { Authorization: this.api_key };
+      // fetch photos from the api
+
+        try {
+          
+          const response = await fetch(
+            ` http://34.125.79.200:5432/search?query=${this.search}&per_page=${this.perPage}&page_num=${this.currentPage}`
+          );
+          const data = await response.json();
+          const images = data.img;
+          const ranks = data.search_rank;
+          const ovv = data.game_description;
+          const links = data.steam_link;
+          const names = data.game_name;
+          const ids = data.appids;
+          const totalRes = data.total_num;
+          //store the returned data into the photos array
+          this.images = images;
+          this.ranks = ranks;
+          this.ovv = ovv;
+          this.links = links;
+          this.names = names;
+          this.ids = ids;
+          //prevent our input search data from showing up in the input box
+          this.search = "";
+          this.totalRes = totalRes;
+
+        } catch (error) {
+          console.log(error);
         }
+    
+  }
 
 
   },
@@ -352,6 +412,17 @@ button:focus {
   display: flex;
   flex-wrap: wrap;
   padding: 3rem 0;
+}
+
+.histories{
+  position: fixed;
+  z-index: 1000;
+  margin-left: 1250px;
+  margin-top: 14px;
+}
+
+topButtons{
+  cursor: pointer;
 }
 
 

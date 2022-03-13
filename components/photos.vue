@@ -15,17 +15,14 @@
           <h5 class="card-subtitle"> Description </h5>
 
           <p class="card-text">{{ovv}}</p>
-          <span class="card-button"><button type="submit" class="button-show-more" @click="goToGamePage()">Show more</button></span>
+          <span class="card-button"><button type="submit" class="button-show-more" @click="goToGamePage()">Show reviews</button></span>
           <!-- Bootstrap collapse -->
         </div>
         <div class="card-footer">
-          <p> Steam link</p>
-          <p class="download" @click="getDownload()">
+          <p class="download" @click="getDownload()"> Steam link &nbsp;
             <img src="../assets/link.png" alt="Steam" width="24" height="24">
           </p>
-          <br>
-          <p>Add review</p>
-          <p class="add-review" @click="addReview()">
+          <p class="add-review" @click="addReview()">Add review&nbsp;
             <img src="../assets/review.png" alt="Review" width="24" height="24">
           </p>
         </div>
@@ -69,7 +66,7 @@
 
 <script>
 
-
+import Swal from 'sweetalert2'
 import lozad from "lozad";
 const axios = require("axios");
 export default {
@@ -94,19 +91,20 @@ export default {
   methods: {
     // download image
     getDownload() {
-      axios({
-        url: `${this.dimage}`,
-        method: "GET",
-        responseType: "blob",
-      }).then((response) => {
-        var fileUrl = window.URL.createObjectURL(new Blob([response.data]));
-        var fileLink = document.createElement("a");
-        fileLink.href = fileUrl;
+      // axios({
+      //   url: `${this.dimage}`,
+      //   method: "GET",
+      //   responseType: "blob",
+      // }).then((response) => {
+      //   var fileUrl = window.URL.createObjectURL(new Blob([response.data]));
+      //   var fileLink = document.createElement("a");
+      //   fileLink.href = fileUrl;
 
-        fileLink.setAttribute("download", "pexelry download.jpeg");
-        document.body.appendChild(fileLink);
-        fileLink.click();
-      });
+      //   fileLink.setAttribute("download", "pexelry download.jpeg");
+      //   document.body.appendChild(fileLink);
+      //   fileLink.click();
+      // });
+       window.open('https://store.steampowered.com/app/' + this.gameid,"_black");
     },
 
     // go to shop link
@@ -115,8 +113,32 @@ export default {
     },
 
     // add user review to db
-    addReview() {
+    async addReview() {
+      const { value: formValues } = await Swal.fire({
+        title: 'Add review',
+        html:
+          'Your name: <br> <input id="swal-input1" class="swal2-input" size="10"> <br><br>' +
+          'Review: <input id="swal-input2" class="swal2-input" size="30">',
+        focusConfirm: false,
+        preConfirm: () => {
+          return [
+            document.getElementById('swal-input1').value,
+            document.getElementById('swal-input2').value
+          ]
+        }
+      })
 
+      if (formValues) {
+        const reviewName = JSON.stringify(formValues[0]);
+        const reviewData = JSON.stringify(formValues[1])
+            try {
+      fetch(
+        ` http://34.125.79.200:5432/search?review_name=${reviewName}&review=${reviewData}`
+      );
+    } catch (error) {
+      console.log(error);
+    }
+      }      
     },
 
 
@@ -135,7 +157,7 @@ export default {
 .card {
   margin: 20px 20px;
   box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
-  height: 13rem;
+  height: 15rem;
   flex-direction: row;
   width: 100%;
 }
@@ -162,6 +184,7 @@ p {
 
 .button-show-more{
   width: 120px;
+  position: relative;
 }
 
 
@@ -169,7 +192,16 @@ p {
   cursor: pointer;
   color: #333333;
   font-size: 1.1rem;
-  padding-left: 2.5rem;
+  margin-left: 0.5rem;
+  margin-top:4rem;
+}
+
+.add-review{
+    cursor: pointer;
+  color: #333333;
+  font-size: 1.1rem;
+  margin-left: 0.5rem;
+    margin-top:1rem;
 }
 
  .card-text{
@@ -177,12 +209,28 @@ p {
    -webkit-box-orient: vertical;
    -webkit-line-clamp: 3;
    word-wrap:break-word;
-   overflow: hidden;
+   text-overflow: ellipsis;
+   min-height: 4rem;
  }
 
+.card-header{
+  max-width: 4rem;
+}
+
+.card-footer{
+  min-width: 13rem;
+  min-height: 15rem;
+  max-width: 13rem;
+  max-height: 15rem;
+}
+
 .card-img-left{
-  width:29rem;
-  height:13rem;}
+  max-width:29rem;
+  max-height:15rem;
+  min-width: 29rem;
+  min-height: 15rem;
+  
+  }
 
 
 </style>
