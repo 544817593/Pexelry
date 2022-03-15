@@ -79,7 +79,8 @@ export default {
     links:{},
     attrib:{},
     imgcap:{},
-    gameid:{}
+    gameid:{},
+    lastSearch:{}
   },
   data() {
     return {
@@ -107,17 +108,12 @@ export default {
        window.open('https://store.steampowered.com/app/' + this.gameid,"_black");
     },
 
-    // go to shop link
-    getLink() {
-
-    },
-
     // add user review to db
     async addReview() {
       const { value: formValues } = await Swal.fire({
         title: 'Add review',
         html:
-          'Your name: <br> <input id="swal-input1" class="swal2-input" size="10"> <br><br>' +
+          'Your ID: <br> <input id="swal-input1" class="swal2-input" size="10"> <br><br>' +
           'Review: <input id="swal-input2" class="swal2-input" size="30">',
         focusConfirm: false,
         preConfirm: () => {
@@ -132,9 +128,11 @@ export default {
         const reviewName = JSON.stringify(formValues[0]);
         const reviewData = JSON.stringify(formValues[1])
             try {
-      fetch(
-        ` http://34.125.79.200:5432/search?review_name=${reviewName}&review=${reviewData}`
+      const response = fetch(
+        ` http://34.125.79.200:5432/search?game_id=${this.gameid}&steam_id=${reviewName}&review=${reviewData}`
       );
+      const data = await response.json();
+      const success = data.success;
     } catch (error) {
       console.log(error);
     }
@@ -144,7 +142,7 @@ export default {
 
     // open page for one game
     goToGamePage(){
-      this.$router.push({name:'game', params:{id:this.gameid}});
+      this.$router.push({name:'game', params:{id:this.gameid, searchTerm:this.lastSearch}});
     }
   }
 };

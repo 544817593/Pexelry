@@ -4,22 +4,22 @@
       <div class="card">
         <img
           class="card-img-left card-img-left-gameProfile"
-          :src="img"
+          :src="image"
           :alt="attrib"
         />
 
         <div class="card-body">
-          <h4 class="card-title">Game title</h4>
+          <h4 class="card-title">{{gameName}}</h4>
           <h5 class="card-subtitle"> Description </h5>
-          <p class="card-text">description description description description description description description description</p>
+          <p class="card-text">{{gameDescription}}</p>
           <h6 class="card-otherinfo">Other information</h6>
-          <p class="card-otherinfotext">Recent rating: Very Negative
-              <br>Recent posivies: 1% of the 29,180 user reviews in the last 30 days are positive.
-              <br>Date published: 21 Dec, 2017
-              <br>Publisher: 24 Entertainment</p>
+          <p class="card-otherinfotext">Recent rating: {{recentRating}}
+              <br>Recent posivies: {{recentPositives}}
+              <br>Date published: {{publishDate}}
+              <br>Publisher: {{publisher}}</p>
           <!-- Bootstrap collapse -->
         </div>
-        <div class="card-footer">
+        <!-- <div class="card-footer">
           <p> Steam link</p>
           <p class="download" @click="getDownload()">
             <font-awesome-icon :icon="['fas', 'link']" />
@@ -29,6 +29,14 @@
           <p class="add-review" @click="addReview()">
             <font-awesome-icon :icon="['fas', 'pen']" />
           </p>
+        </div> -->
+          <div class="card-footer">
+          <p class="download" @click="getDownload()"> Steam link &nbsp;
+            <img src="../assets/link.png" alt="Steam" width="24" height="24">
+          </p>
+          <p class="add-review" @click="addReview()">Add review&nbsp;
+            <img src="../assets/review.png" alt="Review" width="24" height="24">
+          </p>
         </div>
       </div>
     </div>
@@ -36,50 +44,64 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
 const axios = require("axios");
 export default {
-  name: "Photos",
+  name: "Game",
   props:{
-    img:{},
-    name:{},
-    attrib:{},
-    imgcap:{},
-    id:{},
-    gameid:{}
+          /* returned by backend */
+      image:{}, // game image
+      gameName:{}, // game name
+      gameDescription:{}, // game description
+      link:{}, // steam link to the game
+      recentRating:{}, // recent rating for the game
+      recentPositives:{}, // recent positive rating for the game
+      publishDate:{}, // game's publish date
+      publisher:{}, // game's Publisher
+      gameid:{} // game's steam id
   },
   data() {
     return {
       loading: true,
       // dimage = download image
-      dimage: this.$props.img,
+      dimage: this.$props.image,
     };
   },
   methods: {
     // download image
     getDownload() {
-      axios({
-        url: `${this.dimage}`,
-        method: "GET",
-        responseType: "blob",
-      }).then((response) => {
-        var fileUrl = window.URL.createObjectURL(new Blob([response.data]));
-        var fileLink = document.createElement("a");
-        fileLink.href = fileUrl;
-
-        fileLink.setAttribute("download", "pexelry download.jpeg");
-        document.body.appendChild(fileLink);
-        fileLink.click();
-      });
-    },
-
-    // go to shop link
-    getLink() {
-
+      window.open(this.link,"_black");
     },
 
     // add review to db
-    addReview() {
+    async addReview() {
+      const { value: formValues } = await Swal.fire({
+        title: 'Add review',
+        html:
+          'Your ID: <br> <input id="swal-input1" class="swal2-input" size="10"> <br><br>' +
+          'Review: <input id="swal-input2" class="swal2-input" size="30">',
+        focusConfirm: false,
+        preConfirm: () => {
+          return [
+            document.getElementById('swal-input1').value,
+            document.getElementById('swal-input2').value
+          ]
+        }
+      })
 
+      if (formValues) {
+        const reviewName = JSON.stringify(formValues[0]);
+        const reviewData = JSON.stringify(formValues[1])
+            try {
+      const response = fetch(
+        ` http://34.125.79.200:5432/search?game_id=${this.gameid}&steam_id=${reviewName}&review=${reviewData}`
+      );
+      const data = await response.json();
+      const success = data.success;
+    } catch (error) {
+      console.log(error);
+    }
+      } 
     }
   }
 };
@@ -135,7 +157,16 @@ p {
   cursor: pointer;
   color: #333333;
   font-size: 1.1rem;
-  padding-left: 2.5rem;
+  margin-left: 0.5rem;
+  margin-top:4rem;
+}
+
+.add-review{
+    cursor: pointer;
+  color: #333333;
+  font-size: 1.1rem;
+  margin-left: 0.5rem;
+    margin-top:1rem;
 }
 
 .link {
@@ -155,9 +186,21 @@ p {
    overflow: hidden;
  }
 
-.card-img-left-gameProfile{
-  width:29rem;
-  height:13rem;}
 
+.card-footer{
+  min-width: 13rem;
+  min-height: 20rem;
+  max-width: 13rem;
+  max-height: 20rem;
+}
+
+
+.card-img-left{
+  max-width:29rem;
+  max-height:15rem;
+  min-width: 29rem;
+  min-height: 15rem;
+  
+  }
 
 </style>

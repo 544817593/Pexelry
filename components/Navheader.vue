@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand">
       <!-- <img src="../assets/John-Philip.jpg" width="30" height="30" class="d-inline-block align-top img-rounded" alt=""> -->
       Game Search
     </a>
@@ -22,9 +22,6 @@
         </li>
         <li class="nav-item active">
           <nuxt-link to="/about" class="nav-link"> About</nuxt-link>
-        </li>
-        <li class="nav-item active">
-          <nuxt-link to="/game" class="nav-link"> Game page example</nuxt-link>
         </li>
       </ul>
 

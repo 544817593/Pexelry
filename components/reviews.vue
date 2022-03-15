@@ -3,13 +3,11 @@
   <div class = "container">
     <div class = "row">
       <div class="card">
-        <div class = "card-header">No.{{id}}</div>
+        <div class = "card-header">No.{{ranks}}</div>
 
         <div class="card-body">
-          <h5 class="card-subtitle"> User </h5>
-          <p class="card-text">review review review review review review review review review review review review review review review review review review review review review review review review review review review review
-              review review review review review review review review review review review review review review review review review review review review review review review review review review review review
-              review review review review review review review review review review review review review review
+          <h5 class="card-subtitle"> User ID {{names}} </h5>
+          <p class="card-text">{{reviews}}
           </p>
         </div>
       </div>
@@ -58,18 +56,15 @@ const axios = require("axios");
 export default {
   name: "Reviews",
   props:{
-    img:{},
-    name:{},
-    attrib:{},
-    imgcap:{},
-    id:{},
-    gameid:{}
+      ranks:{}, // list of review rank index
+      names:{}, // list of review user's id
+      reviews: {} // game reviews
   },
   data() {
     return {
       loading: true,
       // dimage = download image
-      dimage: this.$props.img,
+      // dimage: this.$props.img,
     };
   }
 };
