@@ -65,8 +65,11 @@
       ></vue-scroll-indicator>
     </div>
 
+      <div v-if="images.length == 0">
+        <Loading />
+      </div>
 
-      <div class="photos-wrapper">
+      <div v-else class="photos-wrapper">
         <Photos
           v-for="(photo, index) in images"
           v-bind:key="photo.id"
@@ -74,9 +77,10 @@
           :attrib="names[index]"
           :img="photo"
           :gameid="ids[index]"
-          :ovv = "ovv[index]"
-          :links = "links[index]"
-          :ranks = "ranks[index]"
+          :ovv ="ovv[index]"
+          :links ="links[index]"
+          :ranks ="ranks[index]"
+          :lastSearch="lastSearch"
         />
       </div>
     </div>
@@ -93,7 +97,6 @@
       prev-text="Prev"
       next-text="Next"
       last-text="Last"
-      size="lg"
       ></b-pagination>
 
       <p class="mt-3">Current Page: {{ currentPage }}</p>
@@ -166,15 +169,17 @@ export default {
         if (JSON.parse(localStorage.getItem("historyList"))) {
             this.historyList = JSON.parse(localStorage.getItem("historyList"));
         }
-        // for results per page
-        if (JSON.parse(localStorage.getItem("resultsPerPage"))) {
-            this.resultsPerPage = JSON.parse(localStorage.getItem("resultsPerPage"));
-        }
+
     },
 
   async created() {
     //Called synchronously after the instance is created
-
+    if (typeof(this.$route.params.search) != 'undefined'){
+      this.search = this.$route.params.search;
+      this.historyList = this.$route.params.historyList;
+      this.getSearch();
+      return;
+    }
     try {
       const response = await fetch(
         ` http://34.125.79.200:5432/search?query=${this.search}&per_page=${this.perPage}&page_num=${this.currentPage}`
@@ -205,6 +210,7 @@ export default {
   methods: {
     // runs only on field search
     async getSearch() {
+      this.images = [];
       if (this.search != ''){
         // 没有搜索记录，把搜索值push进数组首位，存入本地
                 if (!this.historyList.includes(this.search)) {
@@ -312,6 +318,7 @@ const {} = Swal.fire({
         },
 
   async changePage(){
+    this.images = [];
     this.search = this.lastSearch;
       const headers = { Authorization: this.api_key };
       // fetch photos from the api
