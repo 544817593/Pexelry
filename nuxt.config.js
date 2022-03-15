@@ -1,7 +1,7 @@
 
 export default {
   // Target (https://go.nuxtjs.dev/config-target)
-  target: 'static',
+  target: '',
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     title: 'PEXELRY - PIC IT',
@@ -12,7 +12,7 @@ export default {
       { src: 'https://code.jquery.com/jquery-3.3.1.slim.min.js' },
       { src: 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js' },
       { src: 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js' },
-      { src: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css' }
+      { src: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css' },
     ],
     meta: [
       { charset: 'utf-8' },
@@ -97,6 +97,7 @@ export default {
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
+    '@nuxt/http',
     // https://go.nuxtjs.dev/bootstrap
     'bootstrap-vue/nuxt',
     [
@@ -114,6 +115,16 @@ export default {
       }
     ]
   ],
+
+  http: {
+    proxy: false, // Can be also an object with default options
+    https: false
+  },
+
+  proxy: {
+    '/api/': 'http://34.125.79.200:5432/'
+
+  },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
