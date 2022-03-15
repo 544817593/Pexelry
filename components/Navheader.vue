@@ -37,9 +37,7 @@
   </nav>
 </template>
 <script>
-
 import Swal from "sweetalert2";
-
 export default {
   head() {
     return {
@@ -63,7 +61,6 @@ export default {
     //     title: 'Search history cleared',
     //   })
     // },
-
     // // 弹窗历史记录
     // showHistory(){
     //   Swal.fire({
@@ -77,7 +74,6 @@ export default {
     //     }
     //   })
     // },
-
     // // Change number of results per page
     // async settings(){
     //   /* inputOptions can be an object or Promise */
@@ -90,7 +86,6 @@ export default {
     //       })
     //     }, 100)
     //   })
-
     //   const {} = Swal.fire({
     //     title: 'Results per page',
     //     input: 'radio',
@@ -109,12 +104,9 @@ export default {
     //       document.getElementById("searchButton").click();
     //     }
     //   })
+  }
 
-    }
-  
 };
-
-
 </script>
 
 <style scoped>
@@ -127,11 +119,7 @@ a:hover {
 .img-rounded {
   border-radius: 50%;
 }
-
 .navbar {
   z-index: 900;
 }
-
-
-
 </style>

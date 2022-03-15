@@ -37,7 +37,6 @@
 
   <!--
   <div class="card" style="width: 50rem">
-
     <img
       class="card-img-left"
       :src="img"
@@ -54,7 +53,6 @@
           :src="imgcap"
           :alt="attrib"
         /></span>
-
       <p class="card-text">{{ name }}</p>
       <p class="download" @click="getDownload()">
         <font-awesome-icon :icon="['fas', 'download']" />
@@ -65,7 +63,6 @@
 
 
 <script>
-
 import Swal from 'sweetalert2'
 import lozad from "lozad";
 const axios = require("axios");
@@ -100,14 +97,12 @@ export default {
       //   var fileUrl = window.URL.createObjectURL(new Blob([response.data]));
       //   var fileLink = document.createElement("a");
       //   fileLink.href = fileUrl;
-
       //   fileLink.setAttribute("download", "pexelry download.jpeg");
       //   document.body.appendChild(fileLink);
       //   fileLink.click();
       // });
-       window.open('https://store.steampowered.com/app/' + this.gameid,"_black");
+      window.open('https://store.steampowered.com/app/' + this.gameid,"_black");
     },
-
     // add user review to db
     async addReview() {
       const { value: formValues } = await Swal.fire({
@@ -123,31 +118,26 @@ export default {
           ]
         }
       })
-
       if (formValues) {
         const reviewName = JSON.stringify(formValues[0]);
         const reviewData = JSON.stringify(formValues[1])
-            try {
-      const response = fetch(
-        ` http://34.125.79.200:5432/search?game_id=${this.gameid}&steam_id=${reviewName}&review=${reviewData}`
-      );
-      const data = await response.json();
-      const success = data.success;
-    } catch (error) {
-      console.log(error);
-    }
-      }      
+        try {
+          const response = fetch(
+            ` http://34.125.79.200:5432/search?game_id=${this.gameid}&steam_id=${reviewName}&review=${reviewData}`
+          );
+          const data = await response.json();
+          const success = data.success;
+        } catch (error) {
+          console.log(error);
+        }
+      }
     },
-
-
     // open page for one game
     goToGamePage(){
       this.$router.push({name:'game', params:{id:this.gameid, searchTerm:this.lastSearch}});
     }
   }
 };
-
-
 </script>
 
 
@@ -159,33 +149,26 @@ export default {
   flex-direction: row;
   width: 100%;
 }
-
 p {
   display: inline-block;
   padding-left: 25px;
 }
-
 .card-title{
   padding-bottom: 10px;
 }
-
 .card-subtitle{
   padding-bottom: 15px;
 }
-
 .card-button{
   text-align: center;
   cursor: pointer;
   font-weight: 500;
   padding-left: 25px;
 }
-
 .button-show-more{
   width: 120px;
   position: relative;
 }
-
-
 .download {
   cursor: pointer;
   color: #333333;
@@ -193,42 +176,35 @@ p {
   margin-left: 0.5rem;
   margin-top:4rem;
 }
-
 .add-review{
-    cursor: pointer;
+  cursor: pointer;
   color: #333333;
   font-size: 1.1rem;
   margin-left: 0.5rem;
-    margin-top:1rem;
+  margin-top:1rem;
 }
-
- .card-text{
- display: -webkit-box;
-   -webkit-box-orient: vertical;
-   -webkit-line-clamp: 3;
-   word-wrap:break-word;
-   text-overflow: ellipsis;
-   min-height: 4rem;
- }
-
+.card-text{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  word-wrap:break-word;
+  text-overflow: ellipsis;
+  min-height: 4rem;
+}
 .card-header{
   max-width: 4rem;
 }
-
 .card-footer{
   min-width: 13rem;
   min-height: 15rem;
   max-width: 13rem;
   max-height: 15rem;
 }
-
 .card-img-left{
   max-width:29rem;
   max-height:15rem;
   min-width: 29rem;
   min-height: 15rem;
-  
-  }
 
-
+}
 </style>

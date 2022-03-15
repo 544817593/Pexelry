@@ -16,12 +16,11 @@
 
 
 
-  
+
 
 
   <!--
   <div class="card" style="width: 50rem">
-
     <img
       class="card-img-left"
       :src="img"
@@ -38,7 +37,6 @@
           :src="imgcap"
           :alt="attrib"
         /></span>
-
       <p class="card-text">{{ name }}</p>
       <p class="download" @click="getDownload()">
         <font-awesome-icon :icon="['fas', 'download']" />
@@ -49,16 +47,14 @@
 
 
 <script>
-
-
 import lozad from "lozad";
 const axios = require("axios");
 export default {
   name: "Reviews",
   props:{
-      ranks:{}, // list of review rank index
-      names:{}, // list of review user's id
-      reviews: {} // game reviews
+    ranks:{}, // list of review rank index
+    names:{}, // list of review user's id
+    reviews: {} // game reviews
   },
   data() {
     return {
@@ -68,8 +64,6 @@ export default {
     };
   }
 };
-
-
 </script>
 <style scoped>
 .card {
@@ -79,7 +73,6 @@ export default {
   flex-direction: row;
   width: 100%;
 }
-
 .img-rounded {
   border-radius: 50%;
   width: 2.5rem;
@@ -91,23 +84,17 @@ p {
   display: inline-block;
   padding-left: 25px;
 }
-
 .card-subtitle{
   padding-bottom: 15px;
 }
-
-
- .card-text{
- display: -webkit-box;
-   -webkit-box-orient: vertical;
-   -webkit-line-clamp: 4;
-   word-wrap:break-word;
-   overflow: hidden;
- }
-
+.card-text{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  word-wrap:break-word;
+  overflow: hidden;
+}
 img{
   width:29rem;
   height:13rem;}
-
-
 </style>
