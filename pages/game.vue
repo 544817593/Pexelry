@@ -26,6 +26,15 @@
         </div>
       </div>
       <div class="search-wrapper">
+
+          <vue-simple-suggest hidden
+    v-model="search"
+    display-attribute="name"
+    value-attribute="url"
+    :list="getSuggestionList"
+   
+  ></vue-simple-suggest>
+
         <form @submit.prevent="goToHomePage" id="searchForm">
           <div class="input-group">
             <label>
@@ -54,6 +63,13 @@
         background="none"
       ></vue-scroll-indicator>
     </div>
+          <div class="suggest-list"><ul id="suggest-list"><h5>Search recommendations </h5>
+    <li id="suggest-list"
+      v-for="phr in suggested_phrases"
+      v-bind:key="phr.id"
+    >{{phr}}</li>
+  </ul></div>
+
     <div>
       <div><Game 
         :image="image"
@@ -114,6 +130,7 @@ s0.parentNode.insertBefore(s1,s0);
 <!--End of Tawk.to Script-->
 
 <script>
+import VueSimpleSuggest from 'vue-simple-suggest'
 import Swal from 'sweetalert2'
 import 'animate.css';
 import config from "@/config/keys.js";
@@ -127,7 +144,8 @@ export default {
   components: {
     Reviews,
     Loading,
-    Game
+    Game,
+    VueSimpleSuggest
   },
   data() {
     return {
@@ -152,6 +170,7 @@ export default {
       currentPage: 1, // current page number 
       gameid:0, // game's steam id
       historyList:[], // Search history
+      suggested_phrases: []
 
     };
 
@@ -295,7 +314,13 @@ const {} = Swal.fire({
     } catch (error) {
       console.log(error);
     }
-    }
+    },
+            async getSuggestionList() {
+            const response = await fetch(`http://34.125.79.200:5432/search?query=${this.search}`, { method: 'GET' });
+          const data = await response.json();
+          this.suggested_phrases = data.suggested_phrases;
+          console.log(data.suggested_phrases);
+      }
   },
 
 };
@@ -366,6 +391,59 @@ button:focus {
   margin-left: 1250px;
   margin-top: 14px;
 }
+
+.suggest-list{
+
+  background-color: #ffffff; 
+  color: rgb(0, 0, 0);
+  text-align: center;
+
+
+}
+
+ ul#suggest-list{
+  counter-reset: index;  
+  padding: 0;
+  max-width: 300px;
+  margin-left: 40px;
+  margin-top: 65px;
+  position:absolute;
+}  
+
+
+/* List element */
+li#suggest-list {
+  counter-increment: index; 
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  box-sizing: border-box;
+  color: rgb(0, 0, 0);
+}
+
+
+/* Element counter */
+li#suggest-list::before {
+  content: counters(index, ".", decimal-leading-zero);
+  font-size: 1.5rem;
+  text-align: right;
+  font-weight: bold;
+  min-width: 50px;
+  padding-right: 12px;
+  font-variant-numeric: tabular-nums;
+  align-self: flex-start;
+  background-image: linear-gradient(to bottom, aquamarine, orangered);
+  background-attachment: fixed;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+/* Element separation */
+li#suggest-list + li#suggest-list {
+  border-top: 1px solid rgba(230, 139, 22, 0.966);
+}
+
 
 topButtons{
   cursor: pointer;
