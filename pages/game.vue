@@ -1,23 +1,23 @@
 <template>
   <div>
-    <div class="histories">
-      <topButtons @click="settings()">
-        <img src="../assets/settings.png" alt="Settings"  width="24" height="24">
-        Settings
-      </topButtons>
-      <p></p>
+        <div class="histories">
+          <topButtons @click="settings()">
+          <img src="../assets/settings.png" alt="Settings"  width="24" height="24">
+          Settings
+          </topButtons>
+          <p></p>
 
-      <topButtons @click="showHistory()">
-        <img src="../assets/history.png" alt="Show">
-        Show history
-      </topButtons>
-      <p></p>
+          <topButtons @click="showHistory()">
+          <img src="../assets/history.png" alt="Show">
+          Show history
+          </topButtons>
+          <p></p>
 
-      <topButtons @click="empty()">
-        <img src="../assets/trash.png" alt="Empty" width="24" height="24">
-        Empty history
-      </topButtons>
-    </div>
+          <topButtons @click="empty()">
+          <img src="../assets/trash.png" alt="Empty" width="24" height="24">
+          Empty history
+          </topButtons>
+      </div>
     <div class="pexelry-wrapper">
       <div class="pexelry-head">
         <div>
@@ -26,6 +26,15 @@
         </div>
       </div>
       <div class="search-wrapper">
+
+          <vue-simple-suggest hidden
+    v-model="search"
+    display-attribute="name"
+    value-attribute="url"
+    :list="getSuggestionList"
+   
+  ></vue-simple-suggest>
+
         <form @submit.prevent="goToHomePage" id="searchForm">
           <div class="input-group">
             <label>
@@ -38,7 +47,7 @@
             </label>
 
             <span
-            ><button type="submit" class="input-group-addon bg-success" id="searchButton">
+              ><button type="submit" class="input-group-addon bg-success" id="searchButton">
                 Search
               </button></span
             >
@@ -54,8 +63,15 @@
         background="none"
       ></vue-scroll-indicator>
     </div>
+          <div class="suggest-list"><ul id="suggest-list"><h5>Search recommendations </h5>
+    <li id="suggest-list"
+      v-for="phr in suggested_phrases"
+      v-bind:key="phr.id"
+    >{{phr}}</li>
+  </ul></div>
+
     <div>
-      <div><Game
+      <div><Game 
         :image="image"
         :gameName="gameName"
         :gameDescription="gameDescription"
@@ -89,9 +105,9 @@
         align="center"
         @input="refresh()"
         first-text="First"
-        prev-text="Prev"
-        next-text="Next"
-        last-text="Last"
+      prev-text="Prev"
+      next-text="Next"
+      last-text="Last"
       ></b-pagination>
 
       <p class="mt-3">Current Page: {{ currentPage }}</p>
@@ -103,17 +119,18 @@
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
-  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-  s1.async=true;
-  s1.src='https://embed.tawk.to/62290a9da34c2456412a4944/1fto52ubr';
-  s1.charset='UTF-8';
-  s1.setAttribute('crossorigin','*');
-  s0.parentNode.insertBefore(s1,s0);
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/62290a9da34c2456412a4944/1fto52ubr';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
 
 <script>
+import VueSimpleSuggest from 'vue-simple-suggest'
 import Swal from 'sweetalert2'
 import 'animate.css';
 import config from "@/config/keys.js";
@@ -127,7 +144,8 @@ export default {
   components: {
     Reviews,
     Loading,
-    Game
+    Game,
+    VueSimpleSuggest
   },
   data() {
     return {
@@ -145,39 +163,47 @@ export default {
       names:[], // list of review user's id
       reviews: [], // game reviews
       totalRes: 0, // total number of results
+
       /*frontend data*/
-      search: ["game"], // search term
+      search: ["game"], // search term     
       perPage: 10, // results per page
-      currentPage: 1, // current page number
+      currentPage: 1, // current page number 
       gameid:0, // game's steam id
       historyList:[], // Search history
+      suggested_phrases: []
+
     };
+
   },
   mounted() {
-    // 如果本地存储的数据historyList有值，直接赋值给data中的historyList
-    if (JSON.parse(localStorage.getItem("historyList"))) {
-      this.historyList = JSON.parse(localStorage.getItem("historyList"));
-    }
-  },
+        // 如果本地存储的数据historyList有值，直接赋值给data中的historyList
+        if (JSON.parse(localStorage.getItem("historyList"))) {
+            this.historyList = JSON.parse(localStorage.getItem("historyList"));
+        }
+
+
+    },
   computed: {
     photoos() {
       return this.$store.state.photos;
       console.log(this.$store.state.photos);
     },
+
   },
   async created() {
-
+    
     console.log(this.perPage);
-
+    
     this.gameid = this.$route.params.id;
     this.search = this.$route.params.searchTerm;
-
+  
     //Called synchronously after the instance is created
     try {
       const response = await fetch(
-        `http://34.125.79.200:5432/search?query=${this.search}&per_page=${this.perPage}&page_num=${this.currentPage}&appid=${this.gameid}`,
+        `http://34.125.79.200:5432/search?query=${this.search}&per_page=${this.perPage}&page_num=${this.currentPage}&appid=${this.gameid}`,       
       );
       const data = await response.json();
+
       this.image = data.img;
       this.gameName = data.game_name;
       this.gameDescription = data.game_description;
@@ -188,99 +214,115 @@ export default {
       this.publisher = data.Publisher;
       this.ranks = data.comment_rank;
       this.names = data.user;
-      this.reviews = data.comment;
+      this.reviews = data.comment;  
       this.totalRes = data.total_num;
+      
+     
+      this.search = "";   
 
-
-      this.search = "";
     } catch (error) {
       console.log(error);
     }
   },
   methods: {
-    empty(){
-      localStorage.removeItem('historyList');
-      this.historyList = [];
-      Swal.fire({
-        icon: 'success',
-        title: 'Search history cleared',
-      })
-    },
-    // 弹窗历史记录
-    showHistory(){
-      Swal.fire({
-        title: 'Search history',
-        text: this.historyList,
-        showClass: {
-          popup: 'animate__animated animate__fadeInDown'
+            empty(){
+            localStorage.removeItem('historyList');
+            this.historyList = [];
+            Swal.fire({
+  icon: 'success',
+  title: 'Search history cleared',
+})
         },
-        hideClass: {
-          popup: 'animate__animated animate__fadeOutUp'
-        }
-      })
-    },
-    // Change number of results per page
-    async settings(){
-      /* inputOptions can be an object or Promise */
-      const inputOptions = await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            '5': '5',
-            '10': '10',
-            '20': '20',
-            '50': '50'
-          })
-        }, 100)
-      })
-      const {} = Swal.fire({
-        title: 'Results per page',
-        input: 'radio',
-        inputOptions: inputOptions,
-        inputValidator: (value) => {
-          if (!value) {
-            return 'You need to choose something!'
-          }
-        }
-      }).then((result) => {
-        if (result.value){
-          this.perPage = result.value;
-          localStorage.removeItem("perPage");
-          localStorage.setItem("perPage", JSON.stringify(result.value));
-          this.search = this.lastSearch;
-          this.refresh();
-        }
-      })
-    },
-    goToHomePage(){
+
+        // 弹窗历史记录
+        showHistory(){
+          Swal.fire({
+  title: 'Search history',
+  text: this.historyList,
+  showClass: {
+    popup: 'animate__animated animate__fadeInDown'
+  },
+  hideClass: {
+    popup: 'animate__animated animate__fadeOutUp'
+  }
+})
+        },
+
+        // Change number of results per page
+        async settings(){
+/* inputOptions can be an object or Promise */
+const inputOptions = await new Promise((resolve) => {
+  setTimeout(() => {
+    resolve({
+      '5': '5',
+      '10': '10',
+      '20': '20',
+      '50': '50'
+    })
+  }, 100)
+})
+
+const {} = Swal.fire({
+  title: 'Results per page',
+  input: 'radio',
+  inputOptions: inputOptions,
+  inputValidator: (value) => {
+    if (!value) {
+      return 'You need to choose something!'
+    }
+  }
+}).then((result) => {
+  if (result.value){
+    this.perPage = result.value;
+    localStorage.removeItem("perPage");
+    localStorage.setItem("perPage", JSON.stringify(result.value));
+    this.search = this.lastSearch;
+    this.refresh();
+  }
+})
+
+        },
+            goToHomePage(){
       this.$router.push({name:'index', params:{search:this.search, historyList:this.historyList}});
     },
+
     async refresh(){
       this.reviews = [];
       this.search = this.$route.params.searchTerm;
-      try {
-        const response = await fetch(
-          `http://34.125.79.200:5432/search?query=${this.search}&per_page=${this.perPage}&page_num=${this.currentPage}&appid=${this.gameid}`,
-        );
-        const data = await response.json();
-        this.image = data.img;
-        this.gameName = data.game_name;
-        this.gameDescription = data.game_description;
-        this.link = data.steam_link;
-        this.recentRating = data.recent_rating;
-        this.recentPositives = data.recent_positives;
-        this.publishDate = data.publish_data;
-        this.publisher = data.Publisher;
-        this.ranks = data.comment_rank;
-        this.names = data.user;
-        this.reviews = data.comment;
-        this.totalRes = data.total_num;
+            try {
 
-        this.search = "";
-      } catch (error) {
-        console.log(error);
-      }
+      const response = await fetch(
+        `http://34.125.79.200:5432/search?query=${this.search}&per_page=${this.perPage}&page_num=${this.currentPage}&appid=${this.gameid}`,       
+      );
+      const data = await response.json();
+
+      this.image = data.img;
+      this.gameName = data.game_name;
+      this.gameDescription = data.game_description;
+      this.link = data.steam_link;
+      this.recentRating = data.recent_rating;
+      this.recentPositives = data.recent_positives;
+      this.publishDate = data.publish_data;
+      this.publisher = data.Publisher;
+      this.ranks = data.comment_rank;
+      this.names = data.user;
+      this.reviews = data.comment;  
+      this.totalRes = data.total_num;
+     
+      this.search = "";   
+
+    } catch (error) {
+      console.log(error);
     }
+    },
+            async getSuggestionList() {
+            const response = await fetch(`http://34.125.79.200:5432/search?query=${this.search}`, { method: 'GET' });
+          const data = await response.json();
+          this.suggested_phrases = data.suggested_phrases;
+          console.log(data.suggested_phrases);
+      }
   },
+
 };
 </script>
 
@@ -349,6 +391,60 @@ button:focus {
   margin-left: 1250px;
   margin-top: 14px;
 }
+
+.suggest-list{
+
+  background-color: #ffffff; 
+  color: rgb(0, 0, 0);
+  text-align: center;
+
+
+}
+
+ ul#suggest-list{
+  counter-reset: index;  
+  padding: 0;
+  max-width: 300px;
+  margin-left: 40px;
+  margin-top: 65px;
+  position:absolute;
+}  
+
+
+/* List element */
+li#suggest-list {
+  counter-increment: index; 
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  box-sizing: border-box;
+  color: rgb(0, 0, 0);
+}
+
+
+/* Element counter */
+li#suggest-list::before {
+  content: counters(index, ".", decimal-leading-zero);
+  font-size: 1.5rem;
+  text-align: right;
+  font-weight: bold;
+  min-width: 50px;
+  padding-right: 12px;
+  font-variant-numeric: tabular-nums;
+  align-self: flex-start;
+  background-image: linear-gradient(to bottom, aquamarine, orangered);
+  background-attachment: fixed;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+/* Element separation */
+li#suggest-list + li#suggest-list {
+  border-top: 1px solid rgba(230, 139, 22, 0.966);
+}
+
+
 topButtons{
   cursor: pointer;
 }
