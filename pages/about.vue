@@ -16,38 +16,28 @@
     <div class="pexelry-about">
       <h3>GameSearch</h3>
       <p>
-        Abcdefghijklmnopqrstuvwxyz!!!!!
-        AAAAAAAAAAAAccc
+        This project uses Google Cloud virtual machine as the server. Python3 was used as the programming language and the IDE used was jupyter-notebook on the cloud server. NLTK was mainly used for language processing and pymongo is used to communicate with the database, except for common libraries. Furthermore, we have selected mongoDB as the database, which is between relational database and non-relational database, and all data for this project (including dataset, index etc.) are stored in it.
       </p>
       <p>
-        Empowering Creators By providing free stock photos Pexels helps millions
-        of creators all over the world to easily create beautiful products and
-        designs. <br /><span>About Us</span><br />
+        <br /><span>Dataset</span><br />
 
-        Pexels provides high quality and completely free stock photos licensed
-        under the Pexels license. All photos are nicely tagged, searchable and
-        also easy to discover through our discover pages.
+        The dataset used in this project was the Steam Reviews Dataset pushlished on Kaggle. This dataset is created by the crawler tool provided by Steam, which collected more than 15 million game reviews from more than 8000 games, it contains numbers of attributes such as the game (app) id, game reviews, vote-ups etc. that totals up to a total volume of more than 5GB. Our project uses this dataset as a resource to establish a search for games and their corresponding reviews. We have processed the dataset from csv format to database's collection to perform saving and other operations.
+        In addition, to visually enrich our search result, we have also added more than 1GB sized of game images and their corresponding descriptions to display along with search results.
 
-        <br /><span>Photos</span><br />
-        We have hundreds of thousands free stock photos and every day new high
-        resolution photos will be added. All photos are hand-picked from photos
-        uploaded by our users or sourced from free image websites. We make sure
-        all published pictures are high-quality and licensed under the Pexels
-        license.
+        <br /><span>Language preprocessing</span><br />
+        This project processes English tokens, and the corpora are segmented by non English characters, processed using stop words and stem function provided by NLTK.
 
-        <br /><span>Photo Sources</span><br />
-        Only free images from our community of photographers are added to our
-        photo database. We constantly try to deliver as many high quality free
-        stock photos as possible to the creatives who use our website.
+        <br /><span>Search and retrieval</span><br />
+        This project was influenced by existing film review websites such as Rotten Tomatoes, to search games and its reviews based on the Steam Reviews Dataset. When the user enters a query in the search box and click on the search button, the retrieval ranking results of relevant games will be displayed first. These results are based on 15 million game reviews. If the user decides to click on the button to enter the game page, reviews search results of this game based on the query will be displayed.
 
-        <br /><span>Mission</span><br />
-        We help millions of designers, writers, artists, programmers and other
-        creators to get access to beautiful photos that they can use freely
-        which empowers them to create amazing products, designs, stories,
-        websites, apps, art and other work. We call it: "Empowering Creators"
+        <br /><span>Query Recommendation</span><br />
+        The query recommendation of this project is realized by historical queries. When a user searches for a query on the web page, the query will be recorded in the database, which will also store the historical search times of this query.
 
-        <br /><span>Contribute</span><br />
-        Upload your own pictures to support the Pexels community:
+        <br /><span>Query Expansion</span><br />
+        This project uses the principle of PRF to realize query expansion with historical search results. When a user retrieves the game reviews, the first review in the returned review list is considered to be the most relevant review to the current query. The words that appear most in this review will be associated with the words in this query in the QE database. When the word frequency exceeds 3, and the same word in this query is met again in the game retrieval, QE will be used.
+
+        <br /><span>Dynamic Reviews</span><br />
+        This project supports users to enter new reviews on games. After entering reviews, the database will be updated so that new reviews can be searched.
       </p>
     </div>
   </div>

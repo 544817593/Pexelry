@@ -14,9 +14,9 @@
           <p class="card-text">{{gameDescription}}</p>
           <h6 class="card-otherinfo">Other information</h6>
           <p class="card-otherinfotext">Recent rating: {{recentRating}}
-            <br>Recent posivies: {{recentPositives}}
-            <br>Date published: {{publishDate}}
-            <br>Publisher: {{publisher}}</p>
+              <br>Recent posivies: {{recentPositives}}
+              <br>Date published: {{publishDate}}
+              <br>Publisher: {{publisher}}</p>
           <!-- Bootstrap collapse -->
         </div>
         <!-- <div class="card-footer">
@@ -30,7 +30,7 @@
             <font-awesome-icon :icon="['fas', 'pen']" />
           </p>
         </div> -->
-        <div class="card-footer">
+          <div class="card-footer">
           <p class="download" @click="getDownload()"> Steam link &nbsp;
             <img src="../assets/link.png" alt="Steam" width="24" height="24">
           </p>
@@ -49,16 +49,16 @@ const axios = require("axios");
 export default {
   name: "Game",
   props:{
-    /* returned by backend */
-    image:{}, // game image
-    gameName:{}, // game name
-    gameDescription:{}, // game description
-    link:{}, // steam link to the game
-    recentRating:{}, // recent rating for the game
-    recentPositives:{}, // recent positive rating for the game
-    publishDate:{}, // game's publish date
-    publisher:{}, // game's Publisher
-    gameid:{} // game's steam id
+          /* returned by backend */
+      image:{}, // game image
+      gameName:{}, // game name
+      gameDescription:{}, // game description
+      link:{}, // steam link to the game
+      recentRating:{}, // recent rating for the game
+      recentPositives:{}, // recent positive rating for the game
+      publishDate:{}, // game's publish date
+      publisher:{}, // game's Publisher
+      gameid:{} // game's steam id
   },
   data() {
     return {
@@ -72,6 +72,7 @@ export default {
     getDownload() {
       window.open(this.link,"_black");
     },
+
     // add review to db
     async addReview() {
       const { value: formValues } = await Swal.fire({
@@ -87,24 +88,25 @@ export default {
           ]
         }
       })
+
       if (formValues) {
         const reviewName = JSON.stringify(formValues[0]);
         const reviewData = JSON.stringify(formValues[1])
-        try {
-          const response = fetch(
-            ` http://34.125.79.200:5432/search?game_id=${this.gameid}&steam_id=${reviewName}&review=${reviewData}`
-          );
-          const data = await response.json();
-          const success = data.success;
-        } catch (error) {
-          console.log(error);
-        }
-      }
+            try {
+      const response = fetch(
+        ` http://34.125.79.200:5432/search?appid=${this.gameid}&steam_id=${reviewName}&review=${reviewData}`
+      );
+      const data = await response.json();
+      const success = data.success;
+    } catch (error) {
+      console.log(error);
+    }
+      } 
     }
   }
 };
 </script>
-
+  
 <style>
 .card {
   margin: 20px 20px;
@@ -113,6 +115,7 @@ export default {
   flex-direction: row;
   width: 100%;
 }
+
 .img-rounded {
   border-radius: 50%;
   width: 2.5rem;
@@ -120,28 +123,36 @@ export default {
   padding: 0;
   margin: 0;
 }
+
 .card-img-left-gameProfile{
   margin-top: 50px;
 }
+
 p {
   display: inline-block;
   padding-left: 25px;
 }
+
 .card-title{
   padding-bottom: 10px;
 }
+
 .card-subtitle{
   padding-bottom: 15px;
 }
+
 .card-button{
   text-align: center;
   cursor: pointer;
   font-weight: 500;
   padding-left: 25px;
 }
+
 .button-show-more{
   width: 120px;
 }
+
+
 .download {
   cursor: pointer;
   color: #333333;
@@ -149,13 +160,15 @@ p {
   margin-left: 0.5rem;
   margin-top:4rem;
 }
+
 .add-review{
-  cursor: pointer;
+    cursor: pointer;
   color: #333333;
   font-size: 1.1rem;
   margin-left: 0.5rem;
-  margin-top:1rem;
+    margin-top:1rem;
 }
+
 .link {
   cursor: pointer;
   color: #333333;
@@ -165,24 +178,29 @@ p {
 .card-content{
   flec-basis: auto;
 }
-.card-text{
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  word-wrap:break-word;
-  overflow: hidden;
-}
+ .card-text{
+ display: -webkit-box;
+   -webkit-box-orient: vertical;
+   -webkit-line-clamp: 3;
+   word-wrap:break-word;
+   overflow: hidden;
+ }
+
+
 .card-footer{
   min-width: 13rem;
   min-height: 20rem;
   max-width: 13rem;
   max-height: 20rem;
 }
+
+
 .card-img-left{
   max-width:29rem;
   max-height:15rem;
   min-width: 29rem;
   min-height: 15rem;
+  
+  }
 
-}
 </style>
