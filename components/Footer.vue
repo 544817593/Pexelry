@@ -5,12 +5,12 @@
       <div class="footer-right">
         <p class="footer-group-members">
           <span>Group members</span>
-          Member one, sxxxxxxx;
-          Member one, sxxxxxxx;
-          Member one, sxxxxxxx;
-          Member one, sxxxxxxx;
-          Member one, sxxxxxxx;
-          Member one, sxxxxxxx;
+          Yutong Liu, s2177494;&nbsp;
+          Yuexiang Jin, s1721256;&nbsp;
+          Billy Gao, s1709006;&nbsp;
+          Rongxuan Liu, s1864705;&nbsp;
+          Jianye Sun, s2192970;&nbsp;
+          Zhongyi Yu, s2144864.
         </p>
 
       </div>
