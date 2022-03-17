@@ -94,7 +94,7 @@ export default {
         const reviewData = JSON.stringify(formValues[1])
             try {
       const response = fetch(
-        ` http://34.125.79.200:5432/search?game_id=${this.gameid}&steam_id=${reviewName}&review=${reviewData}`
+        ` http://34.125.79.200:5432/search?appid=${this.gameid}&steam_id=${reviewName}&review=${reviewData}`
       );
       const data = await response.json();
       const success = data.success;
